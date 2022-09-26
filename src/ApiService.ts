@@ -9,6 +9,14 @@ const serverErrorCodeRegEx = /^[5][0-9][0-9]$/;
 const isClientError = (code: number) => clientErrorCodeRegEx.test(String(code));
 const isServerError = (code: number) => serverErrorCodeRegEx.test(String(code));
 
+class ErrorWithStatus extends Error {
+  constructor(message: string, public status: number) {
+    super(message);
+    this.status = status;
+    this.name = 'ErrorWithStatus';
+  }
+}
+
 const DEFAULT_DATA_TYPES: DataTypes = {
   request: 'json',
   response: 'json',
@@ -55,7 +63,7 @@ export default class ApiService<T extends ServiceType> {
 
   checkResponse(url: string, response: Response, body: Nullable<HashMap<any>>) {
     if (isServerError(response.status)) {
-      throw new Error('Server error');
+      throw new ErrorWithStatus('Server error', response.status);
     } else if (body && body.errors && body.errors.length) {
       body.errors.forEach((er: string) => {
         console.error(er); // eslint-disable-line no-console
