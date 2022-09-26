@@ -1,5 +1,5 @@
 {
-  "name": "@gostgroup/gostxios",
+  "name": "gostxios",
   "version": "0.2.3",
   "description": "Useful fetching utility",
   "private": false,
